@@ -74,7 +74,7 @@ class App extends Component {
     const {myText, list, alad, btnVal} = this.state;
     const newList = list;
     //console.log(alad);
-    if(alad == ''){
+    if(btnVal == 'Add'){
       newList.push(myText);
     }
     else{
@@ -138,7 +138,7 @@ class App extends Component {
           })
         }</ul> */}
         <input onChange={(e)=>this.setText(e)} placeholder="Add item.." value={myText}/>
-        {myText && <button onClick={()=>this.add()} cstm_attr={alad}>{btnVal}</button>}
+        {myText && <button onClick={()=>this.add()}>{btnVal}</button>}
         
         
           <ul>{
