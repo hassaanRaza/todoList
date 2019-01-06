@@ -30,3 +30,25 @@
     transform: rotate(360deg);
   }
 }
+.cstmStyle{
+  margin: 20px 0px 0px 20px;
+}
+.editBtn{
+  background: blue;
+  color: white;
+  border: blue;
+}
+.deleteBtn{
+  background: red;
+  color: white;
+  border: red;
+}
+.addUpdateBtn{
+  background: green;
+  color: white;
+  border: green;
+  height: 22px;
+}
+.searchInput{
+  display: block;
+}

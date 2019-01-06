@@ -9,62 +9,16 @@ class App extends Component {
     this.state =  {
       text : "",
       myText : '',
+      //list:['Babu', 'Jamal', 'Don', 'Muraad', 'Islam', 'Nawaz', 'Imran', 'Abida', 'Nadeem', 'Musa', 'Essa', 'Atif'],
       list:[],
       btnVal: 'Add',
-      alad: ''
+      alad: '',
     }
-    //this.name = "Hassaan";
-    // this.state = {
-    //   todoText: '',
-    //   list: [],
-    // }
+    this.add = this.add.bind(this);
+    this.setText = this.setText.bind(this);
+    this.search = this.search.bind(this);
   }
-  // getName(e){
-  //   this.setState({
-  //     name : e.target.value
-  //   })
-  // }
-  // getAbuName(e){
-  //   this.setState({
-  //     abuName : e.target.value
-  //   })
-  // }
-  // getAge(e){
-  //   this.setState({
-  //     age : e.target.value
-  //   })
-  // }
-  // changeText(){
-  //   // console.log('From function change text');
-  //   // this.setState({
-  //   //   text: 'Qibla',
-  //   // })
-  // }
-  // displayText(e){
-  //   this.setState({
-  //     text : e.target.value
-  //   })
-  // }
-  // storeText(e){
-  //   this.setState({
-  //     todoText: e.target.value,
-  //   });
-  // }
-  // add(){
-  //   const { todoText, list } = this.state;
-  //   const newList = list;
-
-  //   newList.push(todoText);
-  //   this.setState({list: newList, todoText: ''});
-  // }
-
-  // delete(index){
-  //   const { todoText, list } = this.state;
-  //   const newList = list;
-
-  //   newList.splice(index,1);
-  //   this.setState({list: newList});
-  // }
+  
   setText(e){
     this.setState({
       myText : e.target.value,
@@ -81,13 +35,14 @@ class App extends Component {
       newList.splice(alad,1,myText);
       this.setState({
         btnVal:'Add',
-        alad:''
+        alad:'',
+        //isSearching:false
       })
     }
       
     this.setState({
       myText:"",
-      list:newList
+      list:newList,
     })
   }
   
@@ -98,7 +53,7 @@ class App extends Component {
     newList.splice(index,1);
     this.setState({
       list:newList,
-      myText:""
+      myText:"",
     })
   }
   
@@ -107,47 +62,39 @@ class App extends Component {
     this.setState({
       myText : elem,
       btnVal : 'Update',
-      alad:index
+      alad:index,
     })
   }
 
+  search(e){
+    const val = e.target.value;
+    const {list} = this.state;
+    const searchList = list.filter((item)=>item.toLowerCase().substring(0,val.length) == val.toLowerCase());
+    //console.log(searchList);
+    this.setState({
+      searchList, isSearching : !!val
+    })
+    
+  }
   render() {
-    const {myText,list,btnVal,alad} = this.state;
-    //const { list } = this.state;
-    //const {name, abuName, age} = this.state;
+    const {myText,list,btnVal,isSearching,searchList} = this.state;
+    const actualList = isSearching ? searchList : list;
     return (
-      <div className="">
-        
-        {/* <input onKeyUp={(e) => this.getName(e)} placeholder="Mera naam..."></input>
-        <br/>
-        <input onKeyUp={(e) => this.getAbuName(e)} placeholder="Meray abbu ka naam..."></input>
-        <br/>
-        <input onKeyUp={(e) => this.getAge(e)} placeholder="Meri umar..."></input>
-        <br/>
-        {name && abuName && age && <CustomButton></CustomButton>} */}
-        {/* <input onKeyUp={(e)=> this.displayText(e)}></input>
-        <p>{text}</p> */}
-        {/* <p>{this.name}</p> */}
-        {/* <p>{this.state.text}</p>
-        <button onClick={() => this.changeText()}>Update text</button> */}
-        {/* <input placeholder="Add any item here.." onChange={(e) => this.storeText(e)}/>
-        <button onClick={() => this.add()}>Add</button>
+      <div className="cstmStyle">
+
+        <h4>ToDo List {isSearching && <span>Searching...</span>}</h4>
+        <input className="searchInput" placeholder="Search from list..." onChange={this.search}/>
+        <input onChange={this.setText} placeholder="Add item.." value={myText}/>
+        {/* with arrow function */}
+        {/* {myText && <button className="addUpdateBtn" onClick={()=>this.add()}>{btnVal}</button>} */}
+        {/* with bind */}
+        {myText && <button className="addUpdateBtn" onClick={this.add}>{btnVal}</button>}
+        {actualList.length == 0 && <p>No Records!</p>}
         <ul>{
-          list.map((elem, index) => {
-            return <li>{elem} <button onClick={()=>this.delete(index)}> Delete</button></li>;
-          })
-        }</ul> */}
-        <input onChange={(e)=>this.setText(e)} placeholder="Add item.." value={myText}/>
-        {myText && <button onClick={()=>this.add()}>{btnVal}</button>}
-        
-        
-          <ul>{
-          list.map((item, index)=>{
-            return <li key={Math.random() * index}>{item} - <button onClick={()=>this.edit(index, item)}>Edit</button> - <button onClick={()=>this.delete(index)}>Delete</button></li>
-          })}
-          </ul>
-        
-        {/* <p>{text}</p> */}
+        actualList.map((item, index)=>{
+          return <li key={Math.random() * index}>{item} <button className="editBtn" onClick={this.edit.bind(this, index, item)}>Edit</button> | <button className="deleteBtn" onClick={this.delete.bind(this, index)}>Delete</button></li>
+        })}
+        </ul>
       </div>
     );
   }
